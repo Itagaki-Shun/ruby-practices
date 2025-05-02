@@ -5,7 +5,7 @@ require 'date'
 date = Date.new(2025,5)
 first_day = Date.new(date.year, date.month, 1)
 last_day = Date.new(date.year, date.month, -1)
-
+print '  ' + '   ' * (first_day.wday  - 1)
 (1..last_day.day).each do |day|
     case
     when day >= 10 && (day + first_day.wday) % 7 === 1
