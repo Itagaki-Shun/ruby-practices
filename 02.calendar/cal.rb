@@ -7,8 +7,17 @@ first_day = Date.new(date.year, date.month, 1)
 last_day = Date.new(date.year, date.month, -1)
 
 (1..last_day.day).each do |day|
-    print day
+    case
+    when day >= 10 && (day + first_day.wday) % 7 === 1
+        print day
+        
+    when day >= 10 || (day < 10 && (day + first_day.wday) % 7 === 1)
+        print " #{day}"
+    else
+        print "  #{day}"
+    end
     if (day + first_day.wday) % 7 === 0
         puts ''
     end
 end
+
