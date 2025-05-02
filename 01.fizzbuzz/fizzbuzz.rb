@@ -1,3 +1,4 @@
 #!/usr/bin/env ruby
-
-puts 'hello'
+for i in (1..20)
+    puts i
+end
