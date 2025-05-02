@@ -8,4 +8,7 @@ last_day = Date.new(date.year, date.month, -1)
 
 (1..last_day.day).each do |day|
     print day
+    if (day + first_day.wday) % 7 === 0
+        puts ''
+    end
 end
