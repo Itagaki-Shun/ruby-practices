@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-for i in (1..20)
+(1..20).each do |i|
     case
     when i % 3 === 0 && i % 5 === 0
         puts "FizzBuzz"
