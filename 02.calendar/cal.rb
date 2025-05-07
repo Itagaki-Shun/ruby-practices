@@ -1,48 +1,39 @@
 #!/usr/bin/env ruby
 
-array =[]
-
-# ARGV.each_with_index do |argv, i|
-#     case 
-#     when ARGV[i] === '-y'
-#         array.push(ARGV[i + 1])
-#     when ARGV[i] === '-m'
-#         array.push(ARGV[i + 1])
-#     end
-# end
-
 require 'optparse'
+require 'date'
+
 opt = OptionParser.new
 option = {}
-
-opt.on('-y [VAL]') {|v| option[:y] = v }
-opt.on('-m [VAL]') {|v| option[:m] = v }
+opt.on('-y [VAL]',Integer) {|v| option[:y] = v }
+opt.on('-m [VAL]',Integer) {|v| option[:m] = v }
 opt.parse!(ARGV)
 
-if option[:y]
-    array.push(option[:y])
+if option[:y] == nil
+    option[:y] = Date.today.year
+elsif option[:m] == nil
+    option[:m] = Date.today.month
 end
-if option[:m]
-    array.push(option[:m])
+if option[:y] != nil && option[:m] != nil
+    date = Date.new(option[:y],option[:m])
+else
+    date = Date.today
 end
-array.push('01')
-
-require 'date'
-# date = Date.today
-date = Date.parse(array.join('-'))
 first_day = Date.new(date.year, date.month, 1)
 last_day = Date.new(date.year, date.month, -1)
 puts "      #{date.year}年 #{date.month}月"
 
 day_of_week = ['日 月 火 水 木 金 土']
 puts day_of_week
-print '  ' + '   ' * (first_day.wday)
+
+if first_day.wday > 0
+    print '  ' + '   ' * (first_day.wday - 1)
+end
 (1..last_day.day).each do |day|
-    case
-    when day >= 10 && (day + first_day.wday) % 7 === 1
+    if day >= 10 && (day + first_day.wday) % 7 === 1
         print day
         
-    when day >= 10 || (day < 10 && (day + first_day.wday) % 7 === 1)
+    elsif day >= 10 || (day < 10 && (day + first_day.wday) % 7 === 1)
         print " #{day}"
     else
         print "  #{day}"
