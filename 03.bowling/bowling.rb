@@ -1,12 +1,16 @@
 #!/usr/bin/env ruby
-score = []
-frame = []
+scores = []
+frames = []
 ARGV.each do |arg|
-    score = arg.split(',')
+    scores = arg.split(',')
 end
 
-score = score.flat_map do |x|
+scores = scores.flat_map do |x|
     x == 'X' ? [10,0] : [x.to_i]
 end
 
-p score
+scores.each_slice(2) do |i|
+    frames.push(i)
+end
+
+
