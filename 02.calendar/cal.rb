@@ -9,17 +9,20 @@ opt.on('-y [VAL]',Integer) {|v| option[:y] = v }
 opt.on('-m [VAL]',Integer) {|v| option[:m] = v }
 opt.parse!(ARGV)
 
-# -mと-yに値があるかの確認、なければ今日の日付を代入
-if option[:y] == nil
-    option[:y] = Date.today.year
-elsif option[:m] == nil
-    option[:m] = Date.today.month
-end
-if option[:y] != nil && option[:m] != nil
-    date = Date.new(option[:y],option[:m])
+argument_month = nil
+argument_year = nil
+# -mと-yに値があるかの確認、なければ今月を代入
+if option[:y]
+    argument_year = option[:y]
 else
-    date = Date.today
+    argument_year = Date.today.year
 end
+if option[:m]
+    argument_month = option[:m]
+else
+    argument_month = Date.today.month
+end
+date = Date.new(argument_year,argument_month)
 
 first_day = Date.new(date.year, date.month, 1)
 last_day = Date.new(date.year, date.month, -1)
@@ -36,7 +39,7 @@ end
     current_date = Date.new(date.year,date.month,day)
     # 10日以上で日曜日の日付はそのまま表示する
     if day >= 10 && current_date.sunday?
-        print day   
+        print day
     # 10日以上（1桁）または、10日以内（1桁）で日曜日の場合は半角スペース1つ分あけて表示する
     elsif day >= 10 || day < 10 && current_date.sunday?
         print " #{day}"
