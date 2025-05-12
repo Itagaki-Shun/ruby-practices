@@ -31,9 +31,8 @@ puts "      #{date.year}年 #{date.month}月"
 day_of_week = ['日 月 火 水 木 金 土']
 puts day_of_week
 
-if !(first_day.sunday?)
-    print '  ' + '   ' * (first_day.wday - 1)
-end
+
+print (first_day.wday == 0 ? '' : '  ' + '   ' * (first_day.wday - 1))
 
 (first_day.day..last_day.day).each do |day|
     current_date = Date.new(date.year,date.month,day)
