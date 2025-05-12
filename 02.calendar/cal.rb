@@ -31,24 +31,16 @@ puts "      #{date.year}年 #{date.month}月"
 day_of_week = ['日 月 火 水 木 金 土']
 puts day_of_week
 
-
+# 初日の位置を決める処理（日曜日であればスペースは空けない）
 print (first_day.wday == 0 ? '' : '  ' + '   ' * (first_day.wday - 1))
 
 (first_day.day..last_day.day).each do |day|
     current_date = Date.new(date.year,date.month,day)
-    # 10日以上で日曜日の日付はそのまま表示する
-    if day >= 10 && current_date.sunday?
-        print day
-    # 10日以上（1桁）または、10日以内（1桁）で日曜日の場合は半角スペース1つ分あけて表示する
-    elsif day >= 10 || day < 10 && current_date.sunday?
-        print " #{day}"
+    if current_date.wday > 0
+        print format('%3d',day)
+        puts if current_date.saturday?
     else
-    # それ以外（1桁の日付）は半角スペース2つ分あけて表示する
-        print "  #{day}"
-    end
-
-    if current_date.saturday?
-        puts
+        print format('%2d',day)
     end
 end
 puts
