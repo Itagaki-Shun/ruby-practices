@@ -17,13 +17,18 @@ end
 scores.each_slice(2) do |score|
     frames.push(score)
 end
-p frames
+
 point = 0
 
 frames.each_with_index do |frame,index|
     if index < 9
         if frame[0] == 10 #ストライク
-            point += 10 + frames[index + 1][0] + frames[index + 1][1]
+            if frames[index + 1].include?(10)
+                # binding.irb
+                point += 10 + frames[index + 1][0] + frames[index + 2][0]
+            else
+                point += 10 + frames[index + 1][0] + frames[index + 1][1]
+            end
         elsif frame.sum == 10
             point += 10 + frames[index + 1][0]
         else
