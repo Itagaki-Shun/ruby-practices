@@ -11,17 +11,9 @@ opt.parse!(ARGV)
 
 month = nil
 year = nil
-# -mと-yに値があるかの確認、なければ今月を代入
-if option[:y]
-    year = option[:y]
-else
-    year = Date.today.year
-end
-if option[:m]
-    month = option[:m]
-else
-    month = Date.today.month
-end
+year = option[:y] || Date.today.year
+month = option[:m] || Date.today.month
+
 date = Date.new(year,month)
 
 first_day = Date.new(date.year, date.month, 1)
