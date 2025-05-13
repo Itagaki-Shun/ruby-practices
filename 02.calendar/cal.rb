@@ -24,14 +24,10 @@ day_of_week = ['日 月 火 水 木 金 土']
 puts day_of_week
 
 # 初日の位置を決める処理（日曜日であればスペースは空けない）
-print (first_day.wday == 0 ? '' : '  ' + '   ' * (first_day.wday - 1))
+print '   ' *first_day.wday
 (first_day.day..last_day.day).each do |day|
     current_date = Date.new(date.year,date.month,day)
-    if current_date.wday > 0
-        print format('%3d',day)
-        puts if current_date.saturday?
-    else
-        print format('%2d',day)
-    end
+    print format('%2d ',day)
+    puts if current_date.saturday?
 end
 puts
