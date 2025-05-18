@@ -3,7 +3,7 @@
 # frozen_string_literal: true
 
 scores = []
-frames = []
+
 ARGV.each do |arg|
   scores = arg.split(',')
 end
@@ -11,9 +11,8 @@ end
 scores = scores.flat_map do |x|
   x == 'X' ? [10, 0] : [x.to_i]
 end
-scores.each_slice(2) do |score|
-  frames.push(score)
-end
+
+frames = scores.each_slice(2).to_a
 
 point = 0
 frames.each_with_index do |frame, index|
