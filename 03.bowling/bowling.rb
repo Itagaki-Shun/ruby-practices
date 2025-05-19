@@ -2,10 +2,8 @@
 
 # frozen_string_literal: true
 
-scores = []
-
-ARGV.each do |arg|
-  scores = arg.split(',')
+if ARGV.length > 0
+  scores = ARGV[0].split(',')
 end
 
 scores = scores.flat_map do |x|
