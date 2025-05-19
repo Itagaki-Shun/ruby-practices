@@ -2,9 +2,7 @@
 
 # frozen_string_literal: true
 
-if ARGV.length > 0
-  scores = ARGV[0].split(',')
-end
+scores = ARGV[0].split(',') if ARGV.length.positive?
 
 scores = scores.flat_map do |x|
   x == 'X' ? [10, 0] : [x.to_i]
