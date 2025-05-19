@@ -16,7 +16,7 @@ point = frames.each_with_index.sum do |frame, index|
       if frames[index + 1][0] == 10 # 次のフレームもストライクか判定
         10 + frames[index + 1][0] + frames[index + 2][0]
       else
-        10 + frames[index + 1][0] + frames[index + 1][1]
+        10 + frames[index + 1].sum
       end
     elsif frame.sum == 10 # スペア
       10 + frames[index + 1][0]
