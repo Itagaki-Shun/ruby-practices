@@ -1,3 +1,4 @@
 #!/usr/bin/env ruby
 
-puts 'test'
+path = "/home/itagaki_syun/ruby-practices/04.ls"
+file = Dir.entries(path)
