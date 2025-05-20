@@ -2,10 +2,14 @@
 
 # frozen_string_literal: true
 
-PATH = Dir.pwd
-file = Dir.entries(PATH)
+file = Dir.glob('*')
 
-file = file.reject { |str| str.start_with?('.') }.sort_by(&:downcase)
+# ファイルやディレクトリをアルファベット順にソートする処理（現プラクティスの対象ディレクトリでは不要）
+def file_sort(file)
+  file.reject { |str| str.start_with?('.') }.sort_by(&:downcase)
+end
+
+file = file_sort(file)
 
 columns = 3
 rows = (file.size.to_f / columns).ceil
