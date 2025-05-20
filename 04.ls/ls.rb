@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-PATH = '/home/itagaki_syun/ruby-practices/04.ls'.freeze
+# frozen_string_literal: true
+
+PATH = '/home/itagaki_syun/ruby-practices/04.ls'
 file = Dir.entries(PATH)
 
 file = file.reject { |str| str.start_with?('.') }.sort_by(&:downcase)
