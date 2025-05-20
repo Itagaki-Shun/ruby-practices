@@ -2,7 +2,7 @@
 
 # frozen_string_literal: true
 
-PATH = '/home/itagaki_syun/ruby-practices/04.ls'
+PATH = Dir.pwd
 file = Dir.entries(PATH)
 
 file = file.reject { |str| str.start_with?('.') }.sort_by(&:downcase)
