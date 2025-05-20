@@ -3,9 +3,7 @@
 path = "/home/itagaki_syun/ruby-practices/04.ls"
 file = Dir.entries(path)
 
-file.delete_if { |str| str.start_with?('.') }
-
-file = file.sort_by(&:downcase)
+file = file.reject { |str| str.start_with?('.') }.sort_by(&:downcase)
 
 columns = 3
 rows = (file.size.to_f / columns).ceil
