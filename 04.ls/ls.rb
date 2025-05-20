@@ -15,7 +15,7 @@ file_name_length = file.max_by { |name| name.to_s.length }
 file.each_with_index do |name, index|
   row = index % rows
   col = index / rows
-  transformation_file[row][col] = name.ljust(file_name_length.length + 1)
+  transformation_file[row][col] = name.ljust(file_name_length.length + 1) unless col == columns
 end
 
 transformation_file.each do |row|
