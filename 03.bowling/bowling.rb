@@ -10,7 +10,7 @@ end
 
 frames = scores.each_slice(2).to_a
 
-point = frames.each_with_index.sum do |frame, index|
+total_score = frames.each_with_index.sum do |frame, index|
   point = frame.sum
 
   if index < 9 # 9フレームまでの計算
@@ -27,4 +27,4 @@ point = frames.each_with_index.sum do |frame, index|
 
   point
 end
-puts point
+puts total_score
