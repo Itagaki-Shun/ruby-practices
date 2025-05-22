@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+# frozen_string_literal: true
 
 class Shot
   attr_reader :scores, :score_per_throw
