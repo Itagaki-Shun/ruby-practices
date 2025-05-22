@@ -6,8 +6,6 @@ class Frame
   end
 
   def frame_by_frame_score
-    frames = @scores.each_slice(2).to_a
-    frames
+    @scores.each_slice(2).to_a
   end
 end
-
