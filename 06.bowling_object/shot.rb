@@ -1,1 +1,9 @@
-# このクラスは引数を一投ずつ（shot）に分けることが目的
+#!/usr/bin/env ruby
+
+class Shot
+  attr_reader :scores
+
+  def initialize(pin = ARGV[0])
+    @scores = pin.split(',')
+  end
+end
