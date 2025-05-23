@@ -6,18 +6,18 @@ class Game
   end
 
   def scoring
-    point = @frames.each_with_index.sum do |frame, index|
-      point = frame.sum
+    @frames.each_with_index.sum do |shot, frame|
+      point = shot.sum
 
-      if index < 9 # 9フレームまでの計算
-        if frame[0] == 10 # ストライク
-          point += if @frames[index + 1][0] == 10 # 次のフレームもストライクか判定
-                    @frames[index + 1][0] + @frames[index + 2][0]
-                  else
-                    @frames[index + 1].sum
-                  end
-        elsif frame.sum == 10 # スペア
-          point += @frames[index + 1][0]
+      if frame < 9 # 9フレームまでの計算
+        if shot[0] == 10 # ストライク
+          point += if @frames[frame + 1][0] == 10 # 次のフレームもストライクか判定
+                     @frames[frame + 1][0] + @frames[frame + 2][0]
+                   else
+                     @frames[frame + 1].sum
+                   end
+        elsif shot.sum == 10 # スペア
+          point += @frames[frame + 1][0]
         end
       end
 
