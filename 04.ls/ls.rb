@@ -4,11 +4,6 @@
 
 file = Dir.glob('*')
 
-# ファイルやディレクトリをアルファベット順にソートする処理（現プラクティスの対象ディレクトリでは不要）
-def file_sort(file)
-  file.reject { |str| str.start_with?('.') }.sort_by(&:downcase)
-end
-
 # ファイルやディレクトリを指定した形で出力できるように変換し、出力する処理
 def transformation_output_file(file)
   columns = 3
@@ -27,5 +22,4 @@ def transformation_output_file(file)
   end
 end
 
-file = file_sort(file)
 transformation_output_file(file)
