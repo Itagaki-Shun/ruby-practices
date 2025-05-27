@@ -5,8 +5,8 @@
 file = Dir.glob('*')
 COLUMNS = 3
 
-# ファイルやディレクトリを指定した形で出力できるように変換し、出力する処理
-def transformation_output_file(file, columns)
+# ファイルやディレクトリを指定した形に変換するメソッド
+def transformation_file(file, columns)
   rows = (file.size.to_f / columns).ceil
   transformation_file = Array.new(rows) { Array.new(columns) }
   file_name_length = file.max_by { |name| name.to_s.length }
@@ -17,9 +17,15 @@ def transformation_output_file(file, columns)
     transformation_file[row][col] = name.ljust(file_name_length.length + 1) unless col == columns
   end
 
-  transformation_file.each do |row|
+  transformation_file
+end
+
+# 出力を行うメソッド
+def output_file(file)
+  file.each do |row|
     puts row.compact.join
   end
 end
 
-transformation_output_file(file, COLUMNS)
+file = transformation_file(file, COLUMNS)
+output_file(file)
