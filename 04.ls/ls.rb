@@ -9,12 +9,12 @@ COLUMNS = 3
 def transformation_file(file, columns)
   rows = (file.size.to_f / columns).ceil
   transformation_file = Array.new(rows) { Array.new(columns) }
-  file_name_length = file.max_by { |name| name.to_s.length }
+  file_name_length = file.max_by { |name| name.to_s.length }.length
 
   file.each_with_index do |name, index|
-    row = index % rows
-    col = index / rows
-    transformation_file[row][col] = name.ljust(file_name_length.length + 1) unless col == columns
+    row, col = index.divmod(rows)[1], index.divmod(rows)[0]
+
+    transformation_file[row][col] = name.ljust(file_name_length + 1) if col != columns
   end
 
   transformation_file
