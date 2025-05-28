@@ -12,7 +12,8 @@ def transformation_file(file, columns)
   file_name_length = file.max_by { |name| name.to_s.length }.length
 
   file.each_with_index do |name, index|
-    row, col = index.divmod(rows)[1], index.divmod(rows)[0]
+    row = index.divmod(rows)[1]
+    col = index.divmod(rows)[0]
 
     transformation_file[row][col] = name.ljust(file_name_length + 1) if col != columns
   end
