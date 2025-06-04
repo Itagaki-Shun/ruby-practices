@@ -2,7 +2,12 @@
 
 # frozen_string_literal: true
 
-file = Dir.glob('*')
+case ARGV[0]
+when nil
+  file = Dir.glob('*')
+when '-a'
+  file = Dir.entries('.')
+end
 COLUMNS = 3
 
 # ファイルやディレクトリを指定した形に変換するメソッド
