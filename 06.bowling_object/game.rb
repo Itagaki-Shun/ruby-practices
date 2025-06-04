@@ -1,23 +1,25 @@
 # frozen_string_literal: true
 
+require_relative 'frame'
+
 class Game
   def initialize(frames)
-    @frames = frames
+    @frames = frames.map { |rolls| Frame.new(rolls) }
   end
 
   def scoring
     @frames.each_with_index.sum do |shot, frame|
-      point = shot.sum
+      point = shot.score
 
       if frame < 9 # 9フレームまでの計算
-        if shot[0] == 10 # ストライク
-          point += if @frames[frame + 1][0] == 10 # 次のフレームもストライクか判定
-                     @frames[frame + 1][0] + @frames[frame + 2][0]
+        if shot.strike? # ストライク
+          point += if @frames[frame + 1].strike? # 次のフレームもストライクか判定
+                     @frames[frame + 1].first_roll + @frames[frame + 2].first_roll
                    else
-                     @frames[frame + 1].sum
+                     @frames[frame + 1].score
                    end
-        elsif shot.sum == 10 # スペア
-          point += @frames[frame + 1][0]
+        elsif shot.spare? # スペア
+          point += @frames[frame + 1].first_roll
         end
       end
 
