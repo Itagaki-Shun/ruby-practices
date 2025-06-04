@@ -1,11 +1,29 @@
 # frozen_string_literal: true
 
 class Frame
-  def initialize(scores)
-    @scores = scores
+  attr_reader :rolls
+
+  def initialize(rolls)
+    @rolls = rolls
   end
 
-  def frame_by_frame_score
-    @scores.each_slice(2).to_a
+  def score
+    @rolls.sum
+  end
+
+  def first_roll
+    @rolls[0]
+  end
+
+  def second_roll
+    @rolls[1]
+  end
+
+  def strike?
+    first_roll == 10
+  end
+
+  def spare?
+    !strike? && @rolls.sum == 10
   end
 end
