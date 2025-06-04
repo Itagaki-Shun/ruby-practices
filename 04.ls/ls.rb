@@ -10,6 +10,11 @@ when '-a'
 end
 COLUMNS = 3
 
+# ソートするメソッド
+def sort_files(files)
+
+end
+
 # ファイルやディレクトリを指定した形に変換するメソッド
 def transformation_file(file, columns)
   rows = (file.size.to_f / columns).ceil
