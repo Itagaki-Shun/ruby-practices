@@ -8,8 +8,9 @@ class Shot
   end
 
   def score_per_throw
-    @scores.flat_map do |x|
+    @scores = @scores.flat_map do |x|
       x == 'X' ? [10, 0] : [x.to_i]
     end
+    @scores.each_slice(2).to_a
   end
 end
