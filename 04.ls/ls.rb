@@ -2,12 +2,18 @@
 
 # frozen_string_literal: true
 
-case ARGV[0]
-when nil
-  file = Dir.glob('*')
-when '-a'
-  file = Dir.entries('.')
-end
+require 'optparse'
+
+command = {}
+OptionParser.new do |opts|
+  opts.on('-a') { command[:all] = true }
+end.parse!
+
+file = if command[:all]
+         Dir.glob('*', File::FNM_DOTMATCH)
+       else
+         Dir.glob('*')
+       end
 COLUMNS = 3
 
 # ファイルやディレクトリを指定した形に変換するメソッド
