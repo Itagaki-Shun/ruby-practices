@@ -10,24 +10,6 @@ when '-a'
 end
 COLUMNS = 3
 
-# ソートするメソッド
-def sort_files(files)
-  files.sort_by do |name|
-    case name
-    when /^\.$/, /^\.\.$/
-      [0, name]
-    when /^\d+\.[^.]+/
-      [1, name]
-    when /^\./
-      [2, name]
-    when /^[^.]+\.[^.]+/
-      [3, name]
-    else
-      [4, name]
-    end
-  end
-end
-
 # ファイルやディレクトリを指定した形に変換するメソッド
 def transformation_file(file, columns)
   rows = (file.size.to_f / columns).ceil
@@ -50,5 +32,5 @@ def output_file(file)
   end
 end
 
-file = transformation_file(sort_files(file), COLUMNS)
+file = transformation_file(file.sort, COLUMNS)
 output_file(file)
