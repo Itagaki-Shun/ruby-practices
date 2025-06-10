@@ -26,10 +26,20 @@ class BowlingTest < Minitest::Test
     strike_frame = Frame.new([Shot.new('X')])
     assert strike_frame.strike?
     refute strike_frame.spare?
+    # ストライク⇒通常のスコア
+    next_frame1 = Frame.new([Shot.new('6'), Shot.new('3')])
+    assert_equal 19, strike_frame.total_score([next_frame1])
+    # ストライク⇒ストライク
+    next_frame2 = next_frame1
+    next_frame1 = Frame.new([Shot.new('X')])
+    assert_equal 26, strike_frame.total_score([next_frame1, next_frame2])
 
     spare_frame = Frame.new([Shot.new('6'), Shot.new('4')])
     assert spare_frame.spare?
     refute spare_frame.strike?
+    # スペア(次フレームの1投目のスコアを加算)
+    next_frame1 = Frame.new([Shot.new('6'), Shot.new('2')])
+    assert_equal 16, spare_frame.total_score([next_frame1])
 
     spare_or_strike_frame = Frame.new([Shot.new('0'), Shot.new('10')])
     refute spare_or_strike_frame.strike?
