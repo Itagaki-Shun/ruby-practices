@@ -47,19 +47,16 @@ class BowlingTest < Minitest::Test
   end
 
   def test_game
-    first_shot = Shot.new('6,3,9,0,0,3,8,2,7,3,X,9,1,8,0,X,6,4,5')
-    frames = first_shot.score_per_throw
-    first_game = Game.new(frames)
-    assert_equal 139, first_game.scoring
+    first_rolls = %w[6 3 9 0 0 3 8 2 7 3 X 9 1 8 0 X 6 4 5]
+    first_game = Game.new(first_rolls)
+    assert_equal 139, first_game.score
 
-    second_shot = Shot.new('6,3,9,0,0,3,8,2,7,3,X,9,1,8,0,X,X,X,X')
-    frames = second_shot.score_per_throw
-    second_game = Game.new(frames)
-    assert_equal 164, second_game.scoring
+    second_rolls = %w[6 3 9 0 0 3 8 2 7 3 X 9 1 8 0 X X X X]
+    second_game = Game.new(second_rolls)
+    assert_equal 164, second_game.score
 
-    third_shot = Shot.new('X,X,X,X,X,X,X,X,X,X,X,X')
-    frames = third_shot.score_per_throw
-    third_game = Game.new(frames)
-    assert_equal 300, third_game.scoring
+    third_rolls = %w[X X X X X X X X X X X X]
+    third_game = Game.new(third_rolls)
+    assert_equal 300, third_game.score
   end
 end
