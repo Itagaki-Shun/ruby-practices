@@ -4,12 +4,12 @@
 
 require 'optparse'
 
-command = {}
+options = {}
 OptionParser.new do |opts|
-  opts.on('-a') { command[:all] = true }
+  opts.on('-a') { options[:all] = true }
 end.parse!
 
-file = if command[:all]
+file = if options[:all]
          Dir.glob('*', File::FNM_DOTMATCH)
        else
          Dir.glob('*')
@@ -38,5 +38,5 @@ def output_file(file)
   end
 end
 
-file = transformation_file(file.sort, COLUMNS)
+file = transformation_file(file, COLUMNS)
 output_file(file)
