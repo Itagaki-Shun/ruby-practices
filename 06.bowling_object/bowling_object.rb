@@ -7,10 +7,9 @@ require_relative 'frame'
 require_relative 'game'
 
 if ARGV.length.positive?
-  shot = Shot.new(ARGV[0])
-  frames = shot.score_per_throw
-  game = Game.new(frames)
-  puts game.scoring
+  rolls = ARGV[0].split(',')
+  game = Game.new(rolls)
+  puts game.score
 else
   puts 'スコアを入力してください'
 end
