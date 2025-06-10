@@ -3,8 +3,8 @@
 class Frame
   attr_reader :shots
 
-  def initialize(shots)
-    @shots = shots
+  def initialize(*shots)
+    @shots = shots.flatten
   end
 
   def self.build_frames(rolls)
