@@ -20,20 +20,18 @@ class BowlingTest < Minitest::Test
   end
 
   def test_frame
-    frame = Frame.new([6, 3])
+    frame = Frame.new([Shot.new('6'), Shot.new('3')])
     assert_equal 9, frame.score
-    assert_equal 6, frame.first_roll
-    assert_equal 3, frame.second_roll
 
-    strike_frame = Frame.new([10, 0])
+    strike_frame = Frame.new([Shot.new('X')])
     assert strike_frame.strike?
     refute strike_frame.spare?
 
-    spare_frame = Frame.new([6, 4])
+    spare_frame = Frame.new([Shot.new('6'), Shot.new('4')])
     assert spare_frame.spare?
     refute spare_frame.strike?
 
-    spare_or_strike_frame = Frame.new([0, 10])
+    spare_or_strike_frame = Frame.new([Shot.new('0'), Shot.new('10')])
     refute spare_or_strike_frame.strike?
     assert spare_or_strike_frame.spare?
   end
