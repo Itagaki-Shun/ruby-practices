@@ -9,17 +9,14 @@ require_relative 'game'
 
 class BowlingTest < Minitest::Test
   def test_shot
-    first_shot = Shot.new('6,3,9,0,0,3,8,2,7,3,X,9,1,8,0,X,6,4,5')
-    assert_equal %w[6 3 9 0 0 3 8 2 7 3 X 9 1 8 0 X 6 4 5], first_shot.scores
-    assert_equal [[6, 3], [9, 0], [0, 3], [8, 2], [7, 3], [10, 0], [9, 1], [8, 0], [10, 0], [6, 4], [5]], first_shot.score_per_throw
+    first_shot = Shot.new('6')
+    assert_equal 6, first_shot.pins
 
-    second_shot = Shot.new('6,3,9,0,0,3,8,2,7,3,X,9,1,8,0,X,X,X,X')
-    assert_equal %w[6 3 9 0 0 3 8 2 7 3 X 9 1 8 0 X X X X], second_shot.scores
-    assert_equal [[6, 3], [9, 0], [0, 3], [8, 2], [7, 3], [10, 0], [9, 1], [8, 0], [10, 0], [10, 0], [10, 0], [10, 0]], second_shot.score_per_throw
+    second_shot = Shot.new('3')
+    assert_equal 3, second_shot.pins
 
-    third_shot = Shot.new('X,X,X,X,X,X,X,X,X,X,X,X')
-    assert_equal %w[X X X X X X X X X X X X], third_shot.scores
-    assert_equal [[10, 0], [10, 0], [10, 0], [10, 0], [10, 0], [10, 0], [10, 0], [10, 0], [10, 0], [10, 0], [10, 0], [10, 0]], third_shot.score_per_throw
+    third_shot = Shot.new('X')
+    assert_equal 10, third_shot.pins
   end
 
   def test_frame
