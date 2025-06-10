@@ -9,11 +9,9 @@ OptionParser.new do |opts|
   opts.on('-a') { options[:all] = true }
 end.parse!
 
-file = if options[:all]
-         Dir.glob('*', File::FNM_DOTMATCH)
-       else
-         Dir.glob('*')
-       end
+flags = options[:all] ? File::FNM_DOTMATCH : 0
+file = Dir.glob('*', flags)
+
 COLUMNS = 3
 
 # ファイルやディレクトリを指定した形に変換するメソッド
