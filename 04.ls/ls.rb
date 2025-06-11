@@ -2,7 +2,16 @@
 
 # frozen_string_literal: true
 
-file = Dir.glob('*')
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.on('-a') { options[:all] = true }
+end.parse!
+
+flags = options[:all] ? File::FNM_DOTMATCH : 0
+file = Dir.glob('*', flags)
+
 COLUMNS = 3
 
 # ファイルやディレクトリを指定した形に変換するメソッド
