@@ -10,7 +10,7 @@ class Game
 
   def score
     @frames.each_with_index.sum do |frame, idx|
-      next_frames = @frames[(idx + 1)..] || []
+      next_frames = @frames[(idx + 1)..(idx + 2)] || []
       frame.total_score(next_frames)
     end
   end
