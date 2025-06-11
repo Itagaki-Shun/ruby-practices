@@ -7,10 +7,12 @@ require 'optparse'
 options = {}
 OptionParser.new do |opts|
   opts.on('-a') { options[:all] = true }
+  opts.on('-r') { options[:reverse] = true }
 end.parse!
 
 flags = options[:all] ? File::FNM_DOTMATCH : 0
 file = Dir.glob('*', flags)
+file.reverse! if options[:reverse]
 
 COLUMNS = 3
 
