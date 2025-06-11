@@ -35,7 +35,7 @@ class Frame
   end
 
   def spare?
-    shots.size >= 2 && shots[0].pins + shots[1].pins == 10
+    shots.size >= 2 && shots[0..1].map(&:pins).sum == 10
   end
 
   def total_score(next_frames)
@@ -45,7 +45,7 @@ class Frame
 
     if strike?
       bonus = next_frames.flat_map(&:shots)
-      point + bonus[0].pins + bonus[1].pins
+      point + bonus[0..1].map(&:pins).sum
     elsif spare?
       bonus = next_frames.flat_map(&:shots)
       point + bonus[0].pins
