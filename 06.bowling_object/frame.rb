@@ -42,16 +42,14 @@ class Frame
   def total_score(next_frames)
     return score if next_frames.empty?
 
-    point = score
-
     if strike?
       bonus = next_frames.flat_map(&:shots)
-      point + bonus[0..1].map(&:pins).sum
+      score + bonus[0..1].map(&:pins).sum
     elsif spare?
       bonus = next_frames.flat_map(&:shots)
-      point + bonus[0].pins
+      score + bonus[0].pins
     else
-      point
+      score
     end
   end
 end
