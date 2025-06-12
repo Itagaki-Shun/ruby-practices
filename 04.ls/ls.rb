@@ -11,32 +11,32 @@ OptionParser.new do |opts|
 end.parse!
 
 flags = options[:all] ? File::FNM_DOTMATCH : 0
-file = Dir.glob('*', flags)
-file.reverse! if options[:reverse]
+filenames = Dir.glob('*', flags)
+filenames.reverse! if options[:reverse]
 
 COLUMNS = 3
 
 # ファイルやディレクトリを指定した形に変換するメソッド
-def transformation_file(file, columns)
-  rows = (file.size.to_f / columns).ceil
-  transformation_file = Array.new(rows) { Array.new(columns) }
-  file_name_length = file.max_by { |name| name.to_s.length }.length
+def transformation_file(filenames, columns)
+  rows = (filenames.size.to_f / columns).ceil
+  transformation_filenames = Array.new(rows) { Array.new(columns) }
+  file_name_length = filenames.max_by { |name| name.to_s.length }.length
 
-  file.each_with_index do |name, index|
+  filenames.each_with_index do |name, index|
     col, row = index.divmod(rows)
 
-    transformation_file[row][col] = name.ljust(file_name_length + 1) if col != columns
+    transformation_filenames[row][col] = name.ljust(file_name_length + 1) if col != columns
   end
 
-  transformation_file
+  transformation_filenames
 end
 
 # 出力を行うメソッド
-def output_file(file)
-  file.each do |row|
+def output_file(filenames)
+  filenames.each do |row|
     puts row.compact.join
   end
 end
 
-file = transformation_file(file, COLUMNS)
-output_file(file)
+filenames = transformation_file(filenames, COLUMNS)
+output_file(filenames)
