@@ -8,6 +8,7 @@ options = {}
 OptionParser.new do |opts|
   opts.on('-a') { options[:all] = true }
   opts.on('-r') { options[:reverse] = true }
+  opts.on('-l') { options[:long_format] = true }
 end.parse!
 
 flags = options[:all] ? File::FNM_DOTMATCH : 0
