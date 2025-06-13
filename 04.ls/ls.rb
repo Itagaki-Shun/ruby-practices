@@ -3,6 +3,7 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'etc'
 
 options = {}
 OptionParser.new do |opts|
@@ -30,6 +31,10 @@ def transformation_file(filenames, columns)
   end
 
   transformation_filenames
+end
+
+# ファイルやディレクトリの情報を取得するメソッド
+def stat_file(filenames)
 end
 
 # 出力を行うメソッド
