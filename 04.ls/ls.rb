@@ -41,6 +41,9 @@ def stat_file(filenames)
   end
 end
 
+def format_permission(stat)
+end
+
 # 出力を行うメソッド
 def output_file(filenames)
   filenames.each do |row|
