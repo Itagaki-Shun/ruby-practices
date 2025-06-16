@@ -66,6 +66,13 @@ def format_permission(stat)
 
   file_type = stat.ftype
   file_type_and_permission << FILE_TYPE[file_type]
+
+  file_permission = stat.mode.to_s(8).split('')
+  file_permission = file_permission[-3..].map(&:to_i)
+  file_permission = file_permission.map { |val| FILE_PERMISSION[val] }.compact.join
+  file_type_and_permission << file_permission
+
+  file_type_and_permission.join
 end
 
 # 出力を行うメソッド
