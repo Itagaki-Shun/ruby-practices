@@ -55,9 +55,17 @@ end
 
 # ファイルやディレクトリの情報を取得するメソッド
 def stat_file(filenames)
-  stat = filenames.each do |path|
+  filenames.map do |path|
     stat = File::Stat.new(path)
-    puts "#{stat.mode.to_s(8)} #{stat.nlink} #{Etc.getpwuid(stat.uid).name} #{Etc.getpwuid(stat.gid).name} #{stat.size} #{stat.mtime.strftime('%-m月 %e %H:%M')} #{path}"
+    [
+      format_permission(stat),
+      stat.nlink,
+      Etc.getpwuid(stat.uid).name,
+      Etc.getpwuid(stat.gid).name,
+      "#{stat.size} ",
+      stat.mtime.strftime('%-m月 %e %H:%M'),
+      path
+    ].join(' ')
   end
 end
 
