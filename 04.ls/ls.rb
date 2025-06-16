@@ -84,11 +84,19 @@ def format_permission(stat)
 end
 
 # 出力を行うメソッド
-def output_file(filenames)
-  filenames.each do |row|
-    puts row.compact.join
+def output_file(filenames, options)
+  if options[:long_format]
+    puts filenames
+  else
+    filenames.each do |row|
+      puts row.compact.join
+    end
   end
 end
 
-filenames = transformation_file(filenames, COLUMNS)
-output_file(filenames)
+filenames = if options[:long_format]
+              stat_file(filenames)
+            else
+              transformation_file(filenames, COLUMNS)
+            end
+output_file(filenames, options)
