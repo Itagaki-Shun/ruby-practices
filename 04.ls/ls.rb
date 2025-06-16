@@ -63,6 +63,9 @@ end
 
 def format_permission(stat)
   file_type_and_permission = []
+
+  file_type = stat.ftype
+  file_type_and_permission << FILE_TYPE[file_type]
 end
 
 # 出力を行うメソッド
