@@ -95,6 +95,9 @@ def output_file(filenames, options)
 end
 
 filenames = if options[:long_format]
+              # OS標準の-lコマンドにブロックサイズを合わせる
+              total_blocks = filenames.sum { |name| File::Stat.new(name).blocks / 2 }
+              puts "合計 #{total_blocks}"
               stat_file(filenames)
             else
               transformation_file(filenames, COLUMNS)
