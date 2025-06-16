@@ -5,6 +5,26 @@
 require 'optparse'
 require 'etc'
 
+FILE_TYPE = {
+  'fifo' => 'p',
+  'characterSpecial' => 'c',
+  'directory' => 'd',
+  'blockSpecial' => 'b',
+  'file' => '-',
+  'link' => 'l',
+  'socket"' => 's'
+}.freeze
+FILE_PERMISSION = {
+  0 => '---',
+  1 => '--x',
+  2 => '-w-',
+  3 => '-wx',
+  4 => 'r--',
+  5 => 'r-x',
+  6 => 'rw-',
+  7 => 'rwx'
+}.freeze
+
 options = {}
 OptionParser.new do |opts|
   opts.on('-a') { options[:all] = true }
@@ -42,6 +62,7 @@ def stat_file(filenames)
 end
 
 def format_permission(stat)
+  file_type_and_permission = []
 end
 
 # 出力を行うメソッド
