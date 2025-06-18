@@ -87,22 +87,23 @@ def format_permission(stat)
 end
 
 # 出力を行うメソッド
-def output_file(filenames, options)
+def output_file(lines, options)
   if options[:long_format]
-    puts filenames
+    puts lines
   else
-    filenames.each do |row|
+    lines.each do |row|
       puts row.compact.join
     end
   end
 end
 
-filenames = if options[:long_format]
-              # OS標準の-lコマンドにブロックサイズを合わせる
-              total_blocks = filenames.sum { |name| File::Stat.new(name).blocks / 2 }
-              puts "合計 #{total_blocks}"
-              stat_file(filenames)
-            else
-              transformation_file(filenames, COLUMNS)
-            end
-output_file(filenames, options)
+if options[:long_format]
+  # OS標準の-lコマンドにブロックサイズを合わせる
+  total_blocks = filenames.sum { |name| File::Stat.new(name).blocks / 2 }
+  puts "合計 #{total_blocks}"
+  stat_lines = stat_file(filenames)
+  output_file(stat_lines, options)
+else
+  filenames = transformation_file(filenames, COLUMNS)
+  output_file(filenames, options)
+end
