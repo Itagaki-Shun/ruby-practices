@@ -55,6 +55,9 @@ end
 
 # ファイルやディレクトリの情報を取得するメソッド
 def stat_file(filenames)
+  sizes = filenames.map { |path| File::Stat.new(path).size }
+  size_width = sizes.max.to_s.length
+
   filenames.map do |path|
     stat = File::Stat.new(path)
     [
@@ -62,7 +65,7 @@ def stat_file(filenames)
       stat.nlink,
       Etc.getpwuid(stat.uid).name,
       Etc.getpwuid(stat.gid).name,
-      "#{stat.size} ",
+      "#{stat.size.to_s.rjust(size_width)} ",
       stat.mtime.strftime('%-m月 %e %H:%M'),
       path
     ].join(' ')
