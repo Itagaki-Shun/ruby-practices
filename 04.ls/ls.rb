@@ -87,13 +87,9 @@ def format_permission(stat)
 end
 
 # 出力を行うメソッド
-def output_file(lines, options)
-  if options[:long_format]
-    puts lines
-  else
-    lines.each do |row|
-      puts row.compact.join
-    end
+def output_file(lines)
+  lines.each do |row|
+    puts row.compact.join
   end
 end
 
@@ -102,8 +98,8 @@ if options[:long_format]
   total_blocks = filenames.sum { |name| File::Stat.new(name).blocks / 2 }
   puts "合計 #{total_blocks}"
   stat_lines = stat_file(filenames)
-  output_file(stat_lines, options)
+  puts stat_lines
 else
   filenames = transformation_file(filenames, COLUMNS)
-  output_file(filenames, options)
+  output_file(filenames)
 end
