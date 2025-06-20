@@ -3,11 +3,33 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'etc'
+
+FILE_TYPE = {
+  'fifo' => 'p',
+  'characterSpecial' => 'c',
+  'directory' => 'd',
+  'blockSpecial' => 'b',
+  'file' => '-',
+  'link' => 'l',
+  'socket"' => 's'
+}.freeze
+FILE_PERMISSION = {
+  0 => '---',
+  1 => '--x',
+  2 => '-w-',
+  3 => '-wx',
+  4 => 'r--',
+  5 => 'r-x',
+  6 => 'rw-',
+  7 => 'rwx'
+}.freeze
 
 options = {}
 OptionParser.new do |opts|
   opts.on('-a') { options[:all] = true }
   opts.on('-r') { options[:reverse] = true }
+  opts.on('-l') { options[:long_format] = true }
 end.parse!
 
 flags = options[:all] ? File::FNM_DOTMATCH : 0
@@ -31,12 +53,57 @@ def transformation_file(filenames, columns)
   transformation_filenames
 end
 
+# ファイルやディレクトリの情報を取得するメソッド
+def stat_file(filenames)
+  stats = filenames.map { |path| [path, File.lstat(path)] }
+
+  links = stats.map { |_, stat| stat.nlink }
+  link_width = links.max.to_s.length
+
+  sizes = stats.map { |_, stat| stat.size }
+  size_width = sizes.max.to_s.length
+
+  stats.map do |path, stat|
+    [
+      format_permission(stat),
+      stat.nlink.to_s.rjust(link_width),
+      Etc.getpwuid(stat.uid).name,
+      Etc.getpwuid(stat.gid).name,
+      "#{stat.size.to_s.rjust(size_width)} ",
+      stat.mtime.strftime('%-m月 %e %H:%M'),
+      path
+    ].join(' ')
+  end
+end
+
+def format_permission(stat)
+  file_type_and_permission = []
+
+  file_type = stat.ftype
+  file_type_and_permission << FILE_TYPE[file_type]
+
+  file_permission = stat.mode.to_s(8).split('')
+  file_permission = file_permission[-3..].map(&:to_i)
+  file_permission = file_permission.map { |val| FILE_PERMISSION[val] }.compact.join
+  file_type_and_permission << file_permission
+
+  file_type_and_permission.join
+end
+
 # 出力を行うメソッド
-def output_file(filenames)
-  filenames.each do |row|
+def output_file(lines)
+  lines.each do |row|
     puts row.compact.join
   end
 end
 
-filenames = transformation_file(filenames, COLUMNS)
-output_file(filenames)
+if options[:long_format]
+  # OS標準の-lコマンドにブロックサイズを合わせる
+  total_blocks = filenames.sum { |name| File.lstat(name).blocks / 2 }
+  puts "合計 #{total_blocks}"
+  stat_lines = stat_file(filenames)
+  puts stat_lines
+else
+  filenames = transformation_file(filenames, COLUMNS)
+  output_file(filenames)
+end
