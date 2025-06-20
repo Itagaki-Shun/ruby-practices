@@ -55,11 +55,11 @@ end
 
 # ファイルやディレクトリの情報を取得するメソッド
 def stat_file(filenames)
-  sizes = filenames.map { |path| File::Stat.new(path).size }
+  sizes = filenames.map { |path| File.lstat(path).size }
   size_width = sizes.max.to_s.length
 
   filenames.map do |path|
-    stat = File::Stat.new(path)
+    stat = File.lstat(path)
     [
       format_permission(stat),
       stat.nlink,
@@ -95,7 +95,7 @@ end
 
 if options[:long_format]
   # OS標準の-lコマンドにブロックサイズを合わせる
-  total_blocks = filenames.sum { |name| File::Stat.new(name).blocks / 2 }
+  total_blocks = filenames.sum { |name| File.lstat(name).blocks / 2 }
   puts "合計 #{total_blocks}"
   stat_lines = stat_file(filenames)
   puts stat_lines
