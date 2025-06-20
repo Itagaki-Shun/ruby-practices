@@ -55,6 +55,8 @@ end
 
 # ファイルやディレクトリの情報を取得するメソッド
 def stat_file(filenames)
+  links = filenames.map { |path| File.lstat(path).nlink }
+  link_width = links.max.to_s.length
   sizes = filenames.map { |path| File.lstat(path).size }
   size_width = sizes.max.to_s.length
 
@@ -62,7 +64,7 @@ def stat_file(filenames)
     stat = File.lstat(path)
     [
       format_permission(stat),
-      stat.nlink,
+      stat.nlink.to_s.rjust(link_width),
       Etc.getpwuid(stat.uid).name,
       Etc.getpwuid(stat.gid).name,
       "#{stat.size.to_s.rjust(size_width)} ",
