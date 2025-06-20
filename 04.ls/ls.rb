@@ -55,13 +55,15 @@ end
 
 # ファイルやディレクトリの情報を取得するメソッド
 def stat_file(filenames)
-  links = filenames.map { |path| File.lstat(path).nlink }
+  stats = filenames.map { |path| [path, File.lstat(path)] }
+
+  links = stats.map { |_, stat| stat.nlink }
   link_width = links.max.to_s.length
-  sizes = filenames.map { |path| File.lstat(path).size }
+
+  sizes = stats.map { |_, stat| stat.size }
   size_width = sizes.max.to_s.length
 
-  filenames.map do |path|
-    stat = File.lstat(path)
+  stats.map do |path, stat|
     [
       format_permission(stat),
       stat.nlink.to_s.rjust(link_width),
