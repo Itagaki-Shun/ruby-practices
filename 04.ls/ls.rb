@@ -90,6 +90,15 @@ def format_permission(stat)
   file_type_and_permission.join
 end
 
+def format_width(stats)
+  {
+    link: stats.map { |_, stat| stat.nlink }.max.to_s.length,
+    size: stats.map { |_, stat| stat.size }.max.to_s.length,
+    user: stats.map { |_, stat| Etc.getpwuid(stat.uid).name }.max.to_s.length,
+    group: stats.map { |_, stat| Etc.getpwuid(stat.gid).name }.max.to_s.length
+  }
+end
+
 # 出力を行うメソッド
 def output_file(lines)
   lines.each do |row|
