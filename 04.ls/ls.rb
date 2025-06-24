@@ -57,19 +57,14 @@ end
 def stat_file(filenames)
   stats = filenames.map { |path| [path, File.lstat(path)] }
 
-  links = stats.map { |_, stat| stat.nlink }
-  link_width = links.max.to_s.length
-
-  sizes = stats.map { |_, stat| stat.size }
-  size_width = sizes.max.to_s.length
-
+  widths = format_width(stats)
   stats.map do |path, stat|
     [
       format_permission(stat),
-      stat.nlink.to_s.rjust(link_width),
-      Etc.getpwuid(stat.uid).name,
-      Etc.getpwuid(stat.gid).name,
-      "#{stat.size.to_s.rjust(size_width)} ",
+      stat.nlink.to_s.rjust(widths[:link]),
+      Etc.getpwuid(stat.uid).name.to_s.rjust(widths[:user]),
+      Etc.getpwuid(stat.gid).name.to_s.rjust(widths[:group]),
+      "#{stat.size.to_s.rjust(widths[:size])} ",
       stat.mtime.strftime('%-m月 %e %H:%M'),
       path
     ].join(' ')
