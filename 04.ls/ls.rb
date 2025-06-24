@@ -66,7 +66,11 @@ def stat_file(filenames)
       Etc.getpwuid(stat.gid).name.to_s.rjust(widths[:group]),
       "#{stat.size.to_s.rjust(widths[:size])} ",
       stat.mtime.strftime('%-m月 %e %H:%M'),
-      path
+      if format_permission(stat).include?('l')
+        "#{path} -> #{File.readlink(path)}"
+      else
+        path
+      end
     ].join(' ')
   end
 end
