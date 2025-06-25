@@ -62,8 +62,8 @@ def stat_file(filenames)
     [
       format_permission(stat),
       stat.nlink.to_s.rjust(widths[:link]),
-      Etc.getpwuid(stat.uid).name.to_s.rjust(widths[:user]),
-      Etc.getpwuid(stat.gid).name.to_s.rjust(widths[:group]),
+      Etc.getpwuid(stat.uid).name.to_s.ljust(widths[:user]),
+      Etc.getgrgid(stat.gid).name.to_s.ljust(widths[:group]),
       "#{stat.size.to_s.rjust(widths[:size])} ",
       stat.mtime.strftime('%-m月 %e %H:%M'),
       if format_permission(stat).include?('l')
@@ -93,8 +93,8 @@ def format_width(stats)
   {
     link: stats.map { |_, stat| stat.nlink }.max.to_s.length,
     size: stats.map { |_, stat| stat.size }.max.to_s.length,
-    user: stats.map { |_, stat| Etc.getpwuid(stat.uid).name }.max.to_s.length,
-    group: stats.map { |_, stat| Etc.getpwuid(stat.gid).name }.max.to_s.length
+    user: stats.map { |_, stat| Etc.getpwuid(stat.uid).name }.max_by(&:length).length,
+    group: stats.map { |_, stat| Etc.getgrgid(stat.gid).name }.max_by(&:length).length
   }
 end
 
