@@ -84,8 +84,8 @@ def calc_max_widths(file_infos)
   {
     link: file_infos.map { |_, file_info| file_info.nlink }.max.to_s.length,
     size: file_infos.map { |_, file_info| file_info.size }.max.to_s.length,
-    user: file_infos.map { |_, file_info| Etc.getpwuid(file_info.uid).name }.max_by(&:length).length,
-    group: file_infos.map { |_, file_info| Etc.getgrgid(file_info.gid).name }.max_by(&:length).length
+    user: file_infos.map { |_, file_info| Etc.getpwuid(file_info.uid).name }.map(&:length).max,
+    group: file_infos.map { |_, file_info| Etc.getgrgid(file_info.gid).name }.map(&:length).max
   }
 end
 
