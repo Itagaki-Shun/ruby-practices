@@ -89,12 +89,6 @@ def calc_max_widths(file_infos)
   }
 end
 
-def output_lines(lines)
-  lines.each do |row|
-    puts row.compact.join
-  end
-end
-
 if options[:long_format]
   # OS標準の-lコマンドにブロックサイズを合わせる
   total_blocks = filenames.sum { |name| File.lstat(name).blocks / 2 }
@@ -103,5 +97,5 @@ if options[:long_format]
   puts long_format_lines
 else
   filename_lines = format_filenames_table(filenames, COLUMNS)
-  output_lines(filename_lines)
+  filename_lines.each { |row| puts row.compact.join }
 end
