@@ -74,17 +74,10 @@ def file_infos_for_long_format(filenames)
 end
 
 def format_file_mode(file_info)
-  file_type_and_permission = []
+  file_permission = file_info.mode.to_s(8)[-3..].chars.map(&:to_i)
+  file_permission = file_permission.map { |val| FILE_PERMISSION[val] }.join
 
-  file_type = file_info.ftype
-  file_type_and_permission << FILE_TYPE[file_type]
-
-  file_permission = file_info.mode.to_s(8).split('')
-  file_permission = file_permission[-3..].map(&:to_i)
-  file_permission = file_permission.map { |val| FILE_PERMISSION[val] }.compact.join
-  file_type_and_permission << file_permission
-
-  file_type_and_permission.join
+  FILE_TYPE[file_info.ftype] + file_permission
 end
 
 def calc_max_widths(file_infos)
