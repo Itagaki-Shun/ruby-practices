@@ -41,12 +41,12 @@ COLUMNS = 3
 def format_filenames_table(filenames, columns)
   rows = (filenames.size.to_f / columns).ceil
   filename_table = Array.new(rows) { Array.new(columns) }
-  max_filename_width = filenames.max_by { |name| name.to_s.length }.length
+  max_filename_width = filenames.map(&:length).max
 
   filenames.each_with_index do |name, index|
     col, row = index.divmod(rows)
 
-    filename_table[row][col] = name.ljust(max_filename_width + 1) if col != columns
+    filename_table[row][col] = name.ljust(max_filename_width + 1)
   end
 
   filename_table
