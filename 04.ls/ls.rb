@@ -12,7 +12,7 @@ FILE_TYPE = {
   'blockSpecial' => 'b',
   'file' => '-',
   'link' => 'l',
-  'socket"' => 's'
+  'socket' => 's'
 }.freeze
 FILE_PERMISSION = {
   0 => '---',
