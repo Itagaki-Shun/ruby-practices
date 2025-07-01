@@ -60,8 +60,8 @@ def file_infos_for_long_format(filenames)
     [
       format_file_mode(file_info),
       file_info.nlink.to_s.rjust(max_widths[:link]),
-      Etc.getpwuid(file_info.uid).name.to_s.ljust(max_widths[:user]),
-      Etc.getgrgid(file_info.gid).name.to_s.ljust(max_widths[:group]),
+      Etc.getpwuid(file_info.uid).name.ljust(max_widths[:user]),
+      Etc.getgrgid(file_info.gid).name.ljust(max_widths[:group]),
       "#{file_info.size.to_s.rjust(max_widths[:size])} ",
       file_info.mtime.strftime('%-m月 %e %H:%M'),
       if format_file_mode(file_info).include?('l')
