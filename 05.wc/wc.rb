@@ -1,5 +1,7 @@
 #! /usr/bin/env ruby
 
+# frozen_string_literal: true
+
 def file_statistics(read_file)
   lines = read_file.lines.count
   words = read_file.split
