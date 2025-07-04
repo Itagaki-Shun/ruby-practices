@@ -16,17 +16,20 @@ def file_statistics(read_file, options)
   words = read_file.split
   words_count = words.length
   characters = read_file.bytesize
+
   result = []
-  if ARGV.empty?
-    result << lines.to_s.rjust(7) if options[:lines] || options.empty?
-    result << words_count.to_s.rjust(8) if options[:words] || options.empty?
-    result << characters.to_s.rjust(8) if options[:characters] || options.empty?
-  else
-    result << lines.to_s.rjust(4) if options[:lines] || options.empty?
-    result << words_count.to_s.rjust(5) if options[:words] || options.empty?
-    result << characters.to_s.rjust(5) if options[:characters] || options.empty?
-  end
+  result << lines.to_s.rjust(column_widths[:lines]) if options[:lines] || options.empty?
+  result << words_count.to_s.rjust(column_widths[:words]) if options[:words] || options.empty?
+  result << characters.to_s.rjust(column_widths[:characters]) if options[:characters] || options.empty?
   result.join
+end
+
+def column_widths
+  if ARGV.empty?
+    { lines: 7, words: 8, characters: 8 }
+  else
+    { lines: 4, words: 5, characters: 5 }
+  end
 end
 
 if ARGV.empty?
