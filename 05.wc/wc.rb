@@ -2,6 +2,15 @@
 
 # frozen_string_literal: true
 
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.on('-l') { options[:lines] = true }
+  opts.on('-w') { options[:words] = true }
+  opts.on('-c') { options[:characters] = true }
+end.parse!
+
 def file_statistics(read_file)
   lines = read_file.lines.count
   words = read_file.split
