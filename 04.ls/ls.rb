@@ -12,7 +12,7 @@ FILE_TYPE = {
   'blockSpecial' => 'b',
   'file' => '-',
   'link' => 'l',
-  'socket"' => 's'
+  'socket' => 's'
 }.freeze
 FILE_PERMISSION = {
   0 => '---',
@@ -40,31 +40,31 @@ COLUMNS = 3
 
 def format_filenames_table(filenames, columns)
   rows = (filenames.size.to_f / columns).ceil
-  transformation_filenames = Array.new(rows) { Array.new(columns) }
-  file_name_length = filenames.max_by { |name| name.to_s.length }.length
+  filename_table = Array.new(rows) { Array.new(columns) }
+  max_filename_width = filenames.map(&:length).max
 
   filenames.each_with_index do |name, index|
     col, row = index.divmod(rows)
 
-    transformation_filenames[row][col] = name.ljust(file_name_length + 1) if col != columns
+    filename_table[row][col] = name.ljust(max_filename_width + 1)
   end
 
-  transformation_filenames
+  filename_table
 end
 
 def file_infos_for_long_format(filenames)
-  stats = filenames.map { |path| [path, File.lstat(path)] }
+  file_infos = filenames.map { |path| [path, File.lstat(path)] }
 
-  widths = calc_max_widths(stats)
-  stats.map do |path, stat|
+  max_widths = calc_max_widths(file_infos)
+  file_infos.map do |path, file_info|
     [
-      format_file_mode(stat),
-      stat.nlink.to_s.rjust(widths[:link]),
-      Etc.getpwuid(stat.uid).name.to_s.ljust(widths[:user]),
-      Etc.getgrgid(stat.gid).name.to_s.ljust(widths[:group]),
-      "#{stat.size.to_s.rjust(widths[:size])} ",
-      stat.mtime.strftime('%-m月 %e %H:%M'),
-      if format_file_mode(stat).include?('l')
+      format_file_mode(file_info),
+      file_info.nlink.to_s.rjust(max_widths[:link]),
+      Etc.getpwuid(file_info.uid).name.ljust(max_widths[:user]),
+      Etc.getgrgid(file_info.gid).name.ljust(max_widths[:group]),
+      "#{file_info.size.to_s.rjust(max_widths[:size])} ",
+      file_info.mtime.strftime('%-m月 %e %H:%M'),
+      if format_file_mode(file_info).include?('l')
         "#{path} -> #{File.readlink(path)}"
       else
         path
@@ -73,42 +73,29 @@ def file_infos_for_long_format(filenames)
   end
 end
 
-def format_file_mode(stat)
-  file_type_and_permission = []
+def format_file_mode(file_info)
+  file_permission = file_info.mode.to_s(8)[-3..].chars.map(&:to_i)
+  file_permission = file_permission.map { |val| FILE_PERMISSION[val] }.join
 
-  file_type = stat.ftype
-  file_type_and_permission << FILE_TYPE[file_type]
-
-  file_permission = stat.mode.to_s(8).split('')
-  file_permission = file_permission[-3..].map(&:to_i)
-  file_permission = file_permission.map { |val| FILE_PERMISSION[val] }.compact.join
-  file_type_and_permission << file_permission
-
-  file_type_and_permission.join
+  FILE_TYPE[file_info.ftype] + file_permission
 end
 
-def calc_max_widths(stats)
+def calc_max_widths(file_infos)
   {
-    link: stats.map { |_, stat| stat.nlink }.max.to_s.length,
-    size: stats.map { |_, stat| stat.size }.max.to_s.length,
-    user: stats.map { |_, stat| Etc.getpwuid(stat.uid).name }.max_by(&:length).length,
-    group: stats.map { |_, stat| Etc.getgrgid(stat.gid).name }.max_by(&:length).length
+    link: file_infos.map { |_, file_info| file_info.nlink }.max.to_s.length,
+    size: file_infos.map { |_, file_info| file_info.size }.max.to_s.length,
+    user: file_infos.map { |_, file_info| Etc.getpwuid(file_info.uid).name }.map(&:length).max,
+    group: file_infos.map { |_, file_info| Etc.getgrgid(file_info.gid).name }.map(&:length).max
   }
-end
-
-def output_lines(lines)
-  lines.each do |row|
-    puts row.compact.join
-  end
 end
 
 if options[:long_format]
   # OS標準の-lコマンドにブロックサイズを合わせる
   total_blocks = filenames.sum { |name| File.lstat(name).blocks / 2 }
   puts "合計 #{total_blocks}"
-  stat_lines = file_infos_for_long_format(filenames)
-  puts stat_lines
+  long_format_lines = file_infos_for_long_format(filenames)
+  puts long_format_lines
 else
-  filenames = format_filenames_table(filenames, COLUMNS)
-  output_lines(filenames)
+  filename_lines = format_filenames_table(filenames, COLUMNS)
+  filename_lines.each { |row| puts row.compact.join }
 end
