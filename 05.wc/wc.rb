@@ -1,8 +1,5 @@
 #! /usr/bin/env ruby
 
-file = File.open(ARGV[0])
-read_file = File.read(file)
-
 def file_statistics(read_file)
   lines = read_file.lines.count
   words = read_file.split
@@ -12,4 +9,11 @@ def file_statistics(read_file)
   result = ["  #{lines}  ", words_count, characters].join(' ')
 end
 
-puts "#{file_statistics(read_file)} #{file.path}"
+if ARGV.empty?
+  read_file = $stdin.read
+  puts file_statistics(read_file)
+else
+  file = File.open(ARGV[0])
+  read_file = File.read(file)
+  puts "#{file_statistics(read_file)} #{file.path}"
+end
