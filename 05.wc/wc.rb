@@ -39,7 +39,11 @@ end
 
 def column_widths(options)
   if ARGV.empty?
-    [7, 8, 8]
+    if options.values.count(true) == 1
+      [0, 0, 0]
+    else
+      [7, 8, 8]
+    end
   elsif options.values.count(true) == 1
     [0, 0, 0]
   else
