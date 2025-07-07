@@ -32,11 +32,18 @@ def column_widths
   end
 end
 
-if ARGV.empty?
+case ARGV.length
+when 0
   read_file = $stdin.read
   puts file_statistics(read_file, options)
-else
+when 1
   file = File.open(ARGV[0])
   read_file = File.read(file)
   puts "#{file_statistics(read_file, options)} #{file.path}"
+else
+  ARGV.each do |filenames|
+    file = File.open(filenames)
+    read_file = File.read(file)
+    puts "#{file_statistics(read_file, options)} #{file.path}"
+  end
 end
