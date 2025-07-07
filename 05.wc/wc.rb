@@ -24,6 +24,18 @@ def file_statistics(read_file, options)
   result.join
 end
 
+def calc_file_statistics_totals(statistics_for_each_file, options)
+  total_statistics = statistics_for_each_file.map do |str|
+    str.strip.split.map(&:to_i)
+  end
+  sum_totals = total_statistics.transpose.map(&:sum)
+  total_file_statistics = []
+  total_file_statistics << sum_totals[0].to_s.rjust(column_widths[:lines]) if options[:lines] || options.empty?
+  total_file_statistics << sum_totals[1].to_s.rjust(column_widths[:words]) if options[:words] || options.empty?
+  total_file_statistics << sum_totals[2].to_s.rjust(column_widths[:characters]) if options[:characters] || options.empty?
+  total_file_statistics.join
+end
+
 def column_widths
   if ARGV.empty?
     { lines: 7, words: 8, characters: 8 }
@@ -41,9 +53,12 @@ when 1
   read_file = File.read(file)
   puts "#{file_statistics(read_file, options)} #{file.path}"
 else
-  ARGV.each do |filenames|
+  statistics_for_each_file = []
+  ARGV.each_with_index do |filenames, index|
     file = File.open(filenames)
     read_file = File.read(file)
     puts "#{file_statistics(read_file, options)} #{file.path}"
+    statistics_for_each_file << file_statistics(read_file, options)
+    puts "#{calc_file_statistics_totals(statistics_for_each_file, options)} 合計" if index == ARGV.length - 1
   end
 end
