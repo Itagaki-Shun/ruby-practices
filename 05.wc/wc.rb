@@ -17,11 +17,7 @@ def file_statistics(read_file, options)
   words_count = words.length
   characters = read_file.bytesize
 
-  result = []
-  result << lines.to_s.rjust(column_widths[:lines]) if options[:lines] || options.empty?
-  result << words_count.to_s.rjust(column_widths[:words]) if options[:words] || options.empty?
-  result << characters.to_s.rjust(column_widths[:characters]) if options[:characters] || options.empty?
-  result.join
+  format_statistics(lines, words_count, characters, options).join
 end
 
 def calc_file_statistics_totals(statistics_for_each_file, options)
@@ -29,11 +25,15 @@ def calc_file_statistics_totals(statistics_for_each_file, options)
     str.strip.split.map(&:to_i)
   end
   sum_totals = total_statistics.transpose.map(&:sum)
-  total_file_statistics = []
-  total_file_statistics << sum_totals[0].to_s.rjust(column_widths[:lines]) if options[:lines] || options.empty?
-  total_file_statistics << sum_totals[1].to_s.rjust(column_widths[:words]) if options[:words] || options.empty?
-  total_file_statistics << sum_totals[2].to_s.rjust(column_widths[:characters]) if options[:characters] || options.empty?
-  total_file_statistics.join
+  format_statistics(sum_totals[0], sum_totals[1], sum_totals[2], options).join
+end
+
+def format_statistics(lines, words_count, characters, options)
+  result = []
+  result << lines.to_s.rjust(column_widths[:lines]) if options[:lines] || options.empty?
+  result << words_count.to_s.rjust(column_widths[:words]) if options[:words] || options.empty?
+  result << characters.to_s.rjust(column_widths[:characters]) if options[:characters] || options.empty?
+  result
 end
 
 def column_widths
