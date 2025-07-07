@@ -31,19 +31,19 @@ end
 def format_statistics(lines, words_count, characters, options)
   result = []
   widths = column_widths(options)
-  result << lines.to_s.rjust(widths[:lines]) if options[:lines] || options.empty?
-  result << words_count.to_s.rjust(widths[:words]) if options[:words] || options.empty?
-  result << characters.to_s.rjust(widths[:characters]) if options[:characters] || options.empty?
-  result
+  result << lines if options[:lines] || options.empty?
+  result << words_count if options[:words] || options.empty?
+  result << characters if options[:characters] || options.empty?
+  result.map.with_index { |value, index| value.to_s.rjust(widths[index]) }
 end
 
 def column_widths(options)
   if ARGV.empty?
-    { lines: 7, words: 8, characters: 8 }
+    [7, 8, 8]
   elsif options.values.count(true) == 1
-    { lines: 0, words: 0, characters: 0 }
+    [0, 0, 0]
   else
-    { lines: 4, words: 5, characters: 5 }
+    [4, 5, 5]
   end
 end
 
