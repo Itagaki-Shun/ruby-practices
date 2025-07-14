@@ -20,8 +20,8 @@ def file_statistics(read_file, options)
   format_statistics(lines, words_count, characters, options).join
 end
 
-def calc_file_statistics_totals(statistics_for_each_file, options)
-  total_statistics = statistics_for_each_file.map do |str|
+def calc_file_statistics_totals(statistics, options)
+  total_statistics = statistics.map do |str|
     str.strip.split.map(&:to_i)
   end
   sum_totals = total_statistics.transpose.map(&:sum)
@@ -29,12 +29,12 @@ def calc_file_statistics_totals(statistics_for_each_file, options)
 end
 
 def format_statistics(lines, words_count, characters, options)
-  result = []
+  results = []
   widths = column_widths(options)
-  result << lines if options[:lines] || options.empty?
-  result << words_count if options[:words] || options.empty?
-  result << characters if options[:characters] || options.empty?
-  result.map.with_index { |value, index| value.to_s.rjust(widths[index]) }
+  results << lines if options[:lines] || options.empty?
+  results << words_count if options[:words] || options.empty?
+  results << characters if options[:characters] || options.empty?
+  results.map.with_index { |value, index| value.to_s.rjust(widths[index]) }
 end
 
 def column_widths(options)
@@ -60,12 +60,12 @@ when 1
   read_file = File.read(file)
   puts "#{file_statistics(read_file, options)} #{file.path}"
 else
-  statistics_for_each_file = []
-  ARGV.each_with_index do |filenames, index|
-    file = File.open(filenames)
+  statistics = []
+  ARGV.each_with_index do |filename, index|
+    file = File.open(filename)
     read_file = File.read(file)
     puts "#{file_statistics(read_file, options)} #{file.path}"
-    statistics_for_each_file << file_statistics(read_file, options)
-    puts "#{calc_file_statistics_totals(statistics_for_each_file, options)} 合計" if index == ARGV.length - 1
+    statistics << file_statistics(read_file, options)
+    puts "#{calc_file_statistics_totals(statistics, options)} 合計" if index == ARGV.length - 1
   end
 end
