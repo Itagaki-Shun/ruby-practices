@@ -11,7 +11,7 @@ OptionParser.new do |opts|
   opts.on('-c') { options[:characters] = true }
 end.parse!
 
-KEYS = %i[lines words characters]
+KEYS = %i[lines words characters].freeze
 
 def file_statistics(read_file, options, widths, total_statistics = nil, is_total: false)
   if is_total
