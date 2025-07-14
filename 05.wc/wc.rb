@@ -11,6 +11,8 @@ OptionParser.new do |opts|
   opts.on('-c') { options[:characters] = true }
 end.parse!
 
+KEYS = %i[lines words characters]
+
 def file_statistics(read_file, options, widths, total_statistics = nil, is_total: false)
   if is_total
     sum_totals = total_statistics.transpose.map(&:sum)
@@ -26,20 +28,18 @@ end
 
 def format_statistics(lines, words, characters, widths, options)
   values = [lines, words, characters]
-  keys = %i[lines words characters]
 
   results = if options.empty?
               values
             else
-              values.select.with_index { |_, i| options[keys[i]] }
+              values.select.with_index { |_, i| options[KEYS[i]] }
             end
   results.map { |value| value.to_s.rjust(widths) }
 end
 
 def select_widths(max_width, options)
   if options.values.count(true) == 1
-    keys = %i[lines words characters]
-    active_key = keys.find { |key| options[key] }
+    active_key = KEYS.find { |key| options[key] }
     max_width[active_key]
   else
     ARGV.empty? ? 7 : 4
@@ -48,7 +48,6 @@ end
 
 def calc_max_widths(lists, options)
   all_statistics = []
-  keys = %i[lines words characters]
   lists.each do |filename|
     file = File.open(filename)
     read_file = File.read(file)
@@ -56,7 +55,7 @@ def calc_max_widths(lists, options)
   end
   totals = all_statistics.transpose.map(&:sum)
   all_with_totals = all_statistics + [totals]
-  max_width = keys.zip(all_with_totals.transpose.map { |column| column.max.to_s.length }).to_h
+  max_width = KEYS.zip(all_with_totals.transpose.map { |column| column.max.to_s.length }).to_h
 
   return options.values.count(true) == 1 ? 0 : 7 if all_statistics.empty?
 
