@@ -25,11 +25,16 @@ def file_statistics(read_file, options, total_statistics = nil, is_total: false)
 end
 
 def format_statistics(lines, words, characters, options)
-  results = []
   widths = column_widths(options)
-  results << lines if options[:lines] || options.empty?
-  results << words if options[:words] || options.empty?
-  results << characters if options[:characters] || options.empty?
+
+  values = [lines, words, characters]
+  keys = %i[lines words characters]
+
+  results = if options.empty?
+              values
+            else
+              values.select.with_index { |_, i| options[keys[i]] }
+            end
   results.map.with_index { |value, index| value.to_s.rjust(widths[index]) }
 end
 
