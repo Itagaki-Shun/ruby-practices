@@ -4,6 +4,7 @@
 
 require 'minitest/autorun'
 require_relative 'ls_option'
+require_relative 'perm'
 
 class LsTest < Minitest::Test
   # 単数の場合
@@ -46,5 +47,14 @@ class LsTest < Minitest::Test
     assert option_arl.all?
     assert option_arl.reverse?
     assert option_arl.long_format?
+  end
+
+  def test_perm
+    perm = Perm.new
+    file_stat = File.lstat('01.fizzbuzz')
+    assert_equal 'drwxr-xr-x', perm.trans_type_and_permission(file_stat)
+
+    file_stat = File.lstat('README.md')
+    assert_equal '-rw-r--r--', perm.trans_type_and_permission(file_stat)
   end
 end
