@@ -11,6 +11,10 @@ class FileInfo
     @stat = File.lstat(filename)
   end
 
+  def blocks
+    @stat.blocks / 2
+  end
+
   def file_mode
     perm = Perm.new
     perm.trans_type_and_permission(@stat)
