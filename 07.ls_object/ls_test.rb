@@ -5,6 +5,7 @@
 require 'minitest/autorun'
 require_relative 'ls_option'
 require_relative 'perm'
+require_relative 'file_info'
 
 class LsTest < Minitest::Test
   # 単数の場合
@@ -56,5 +57,18 @@ class LsTest < Minitest::Test
 
     file_stat = File.lstat('README.md')
     assert_equal '-rw-r--r--', perm.trans_type_and_permission(file_stat)
+  end
+
+  def test_file_info
+    filename = '01.fizzbuzz'
+    info = FileInfo.new(filename)
+    assert_equal 'drwxr-xr-x', info.file_mode
+    assert_equal 3, info.link
+    assert_equal 'itagaki_syun', info.owner
+    assert_equal 'itagaki_syun', info.group
+    assert_equal 4096, info.bytesize
+    assert_equal '5月  8 14:56', info.update_time
+    option_l = LsOption.new(['-l'])
+    assert_equal '01.fizzbuzz', info.file_type(filename, option_l)
   end
 end
