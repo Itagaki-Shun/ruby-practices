@@ -22,4 +22,11 @@ class Perm
     6 => 'rw-',
     7 => 'rwx'
   }.freeze
+
+  def trans_type_and_permission(file_info)
+    octal = file_info.mode.to_s(8)[-3..].chars.map(&:to_i)
+    permission = octal.map { |val| FILE_PERMISSION[val] }.join
+
+    FILE_TYPE[file_info.ftype] + permission
+  end
 end
