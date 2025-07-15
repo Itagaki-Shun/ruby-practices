@@ -30,8 +30,12 @@ def format_statistics(statistics, widths, options)
   results.map { |value| value.to_s.rjust(widths) }
 end
 
-def select_widths(max_width, options)
-  if options.values.count(true) == 1
+def calc_widths(lists, options)
+  totals = lists.transpose.map(&:sum)
+  all_with_totals = lists + [totals]
+  max_width = KEYS.zip(all_with_totals.transpose.map { |column| column.max.to_s.length }).to_h
+
+  if options.values.count(true) == 1 && lists.size == 1
     active_key = KEYS.find { |key| options[key] }
     max_width[active_key]
   else
@@ -39,26 +43,16 @@ def select_widths(max_width, options)
   end
 end
 
-def calc_max_widths(lists, options)
-  totals = lists.transpose.map(&:sum)
-  all_with_totals = lists + [totals]
-  max_width = KEYS.zip(all_with_totals.transpose.map { |column| column.max.to_s.length }).to_h
-
-  return options.values.count(true) == 1 ? 0 : 7 if lists.empty?
-
-  select_widths(max_width, options)
-end
-
 case ARGV.length
 when 0
   read_file = $stdin.read
   statistics = file_statistics(read_file)
-  max_widths = calc_max_widths([statistics], options)
+  max_widths = calc_widths([statistics], options)
   puts format_statistics(statistics, max_widths, options).join(' ')
 when 1
   read_file = File.read(ARGV[0])
   statistics = file_statistics(read_file)
-  max_widths = calc_max_widths([statistics], options)
+  max_widths = calc_widths([statistics], options)
   puts "#{format_statistics(statistics, max_widths, options).join(' ')} #{ARGV[0]}"
 else
   all_statistics = ARGV.map do |filename|
@@ -66,7 +60,7 @@ else
     file_statistics(read_file)
   end
 
-  max_widths = calc_max_widths(all_statistics, options)
+  max_widths = calc_widths(all_statistics, options)
 
   ARGV.each_with_index do |filename, index|
     statistics = all_statistics[index]
