@@ -62,6 +62,7 @@ class LsTest < Minitest::Test
   def test_file_info
     filename = '01.fizzbuzz'
     info = FileInfo.new(filename)
+    assert_equal 4, info.blocks
     assert_equal 'drwxr-xr-x', info.file_mode
     assert_equal 3, info.link
     assert_equal 'itagaki_syun', info.owner
