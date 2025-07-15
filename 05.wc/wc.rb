@@ -47,11 +47,9 @@ def select_widths(max_width, options)
 end
 
 def calc_max_widths(lists, options)
-  all_statistics = []
-  lists.each do |filename|
-    file = File.open(filename)
-    read_file = File.read(file)
-    all_statistics << [read_file.lines.count, read_file.split.count, read_file.bytesize]
+  all_statistics = lists.map do |filename|
+    read_file = File.read(filename)
+    [read_file.lines.count, read_file.split.count, read_file.bytesize]
   end
   totals = all_statistics.transpose.map(&:sum)
   all_with_totals = all_statistics + [totals]
