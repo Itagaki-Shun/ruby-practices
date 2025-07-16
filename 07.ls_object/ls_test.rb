@@ -6,6 +6,7 @@ require 'minitest/autorun'
 require_relative 'ls_option'
 require_relative 'perm'
 require_relative 'file_info'
+require_relative 'width'
 
 class LsTest < Minitest::Test
   # 単数の場合
@@ -71,5 +72,19 @@ class LsTest < Minitest::Test
     assert_equal '5月  8 14:56', info.update_time
     option_l = LsOption.new(['-l'])
     assert_equal '01.fizzbuzz', info.file_type(filename, option_l)
+  end
+
+  def test_width
+    widths = Width.new
+    stats1 = Struct.new(:link, :owner, :group, :bytesize)[5, 'alice', 'people', 1024]
+    widths.update_max_widths(stats1)
+
+    stats2 = Struct.new(:link, :owner, :group, :bytesize)[20, 'bob', 'dog', 512]
+    widths.update_max_widths(stats2)
+
+    assert_equal 2, widths.max_widths[:link]
+    assert_equal 5, widths.max_widths[:owner]
+    assert_equal 6, widths.max_widths[:group]
+    assert_equal 4, widths.max_widths[:size]
   end
 end
