@@ -8,6 +8,7 @@ require 'etc'
 
 class FileInfo
   def initialize(filename)
+    @filename = filename
     @stat = File.lstat(filename)
   end
 
@@ -40,11 +41,7 @@ class FileInfo
     @stat.mtime.strftime('%-m月 %e %H:%M')
   end
 
-  def file_type(filename, options)
-    if options.long_format?
-      File.symlink?(filename) ? "#{filename} -> #{File.readlink(filename)}" : filename
-    else
-      filename
-    end
+  def file_type
+    File.symlink?(@filename) ? "#{@filename} -> #{File.readlink(@filename)}" : @filename
   end
 end
