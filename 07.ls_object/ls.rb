@@ -43,20 +43,18 @@ widths = Width.new
 file_infos = filenames.map do |filename|
   stats = FileInfo.new(filename)
   widths.update_max_widths(stats)
-  if options.long_format?
-    total_blocks += stats.blocks
-    {
-      mode: stats.file_mode,
-      link: stats.link,
-      owner: stats.owner,
-      group: stats.group,
-      size: stats.bytesize,
-      time: stats.update_time,
-      type: stats.file_type(filename, options)
-    }
-  else
-    stats.file_type(filename, options)
-  end
+
+  total_blocks += stats.blocks
+
+  {
+    mode: stats.file_mode,
+    link: stats.link,
+    owner: stats.owner,
+    group: stats.group,
+    size: stats.bytesize,
+    time: stats.update_time,
+    type: stats.file_type
+  }
 end
 
 max_widths = widths.max_widths
@@ -67,6 +65,6 @@ if options.long_format?
 else
   column = 3
   max_widths = filenames.map(&:length).max
-  filename_lines = format_filenames_table(file_infos, max_widths, column)
+  filename_lines = format_filenames_table(filenames, max_widths, column)
   filename_lines.each { |row| puts row.compact.join }
 end
