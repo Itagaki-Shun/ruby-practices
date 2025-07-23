@@ -3,7 +3,7 @@
 # frozen_string_literal: true
 
 require_relative 'ls_option'
-require_relative 'perm'
+require_relative 'permission'
 require 'etc'
 
 class FileInfo
@@ -17,8 +17,8 @@ class FileInfo
   end
 
   def file_mode
-    perm = Perm.new
-    perm.trans_type_and_permission(@stat)
+    permission = Permission.new
+    permission.trans_type_and_permission(@stat)
   end
 
   def link

@@ -4,7 +4,7 @@
 
 require 'minitest/autorun'
 require_relative 'ls_option'
-require_relative 'perm'
+require_relative 'permission'
 require_relative 'file_info'
 require_relative 'width'
 

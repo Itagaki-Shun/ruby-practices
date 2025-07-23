@@ -2,7 +2,7 @@
 
 # frozen_string_literal: true
 
-class Perm
+class Permission
   FILE_TYPE = {
     'fifo' => 'p',
     'characterSpecial' => 'c',
@@ -12,6 +12,7 @@ class Perm
     'link' => 'l',
     'socket' => 's'
   }.freeze
+
   FILE_PERMISSION = {
     0 => '---',
     1 => '--x',
@@ -22,6 +23,8 @@ class Perm
     6 => 'rw-',
     7 => 'rwx'
   }.freeze
+
+  private_constant :FILE_TYPE, :FILE_PERMISSION
 
   def trans_type_and_permission(file_info)
     octal = file_info.mode.to_s(8)[-3..].chars.map(&:to_i)
