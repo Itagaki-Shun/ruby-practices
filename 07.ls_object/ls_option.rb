@@ -12,14 +12,6 @@ class LsOption
     parse(args)
   end
 
-  def parse(args)
-    OptionParser.new do |opts|
-      opts.on('-a') { @options[:all] = true }
-      opts.on('-r') { @options[:reverse] = true }
-      opts.on('-l') { @options[:long_format] = true }
-    end.parse!(args)
-  end
-
   def all?
     @options[:all]
   end
@@ -30,5 +22,15 @@ class LsOption
 
   def long_format?
     @options[:long_format]
+  end
+
+  private
+
+  def parse(args)
+    OptionParser.new do |opts|
+      opts.on('-a') { @options[:all] = true }
+      opts.on('-r') { @options[:reverse] = true }
+      opts.on('-l') { @options[:long_format] = true }
+    end.parse!(args)
   end
 end

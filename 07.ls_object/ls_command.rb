@@ -25,6 +25,8 @@ class LsCommand
     end
   end
 
+  private
+
   def load_filenames
     @filenames = Dir.glob('*', @flags)
     @filenames.reverse! if @options.reverse?
