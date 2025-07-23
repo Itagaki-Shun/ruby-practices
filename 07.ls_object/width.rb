@@ -5,19 +5,12 @@
 class Width
   attr_reader :max_widths
 
-  def initialize
+  def initialize(stats)
     @max_widths = {
-      link: 0,
-      owner: 0,
-      group: 0,
-      size: 0
+      link: stats.map { |s| s.link.to_s.length }.max,
+      owner: stats.map { |s| s.owner.to_s.length }.max,
+      group: stats.map { |s| s.group.to_s.length }.max,
+      size: stats.map { |s| s.bytesize.to_s.length }.max
     }
-  end
-
-  def update_max_widths(stats)
-    @max_widths[:link] = [@max_widths[:link], stats.link.to_s.length].max
-    @max_widths[:owner] = [@max_widths[:owner], stats.owner.to_s.length].max
-    @max_widths[:group] = [@max_widths[:group], stats.group.to_s.length].max
-    @max_widths[:size] = [@max_widths[:size], stats.bytesize.to_s.length].max
   end
 end
