@@ -51,13 +51,13 @@ class LsTest < Minitest::Test
     assert option_arl.long_format?
   end
 
-  def test_perm
-    perm = Perm.new
+  def test_permission
+    permission = Permission.new
     file_stat = File.lstat('01.fizzbuzz')
-    assert_equal 'drwxr-xr-x', perm.trans_type_and_permission(file_stat)
+    assert_equal 'drwxr-xr-x', permission.trans_type_and_permission(file_stat)
 
     file_stat = File.lstat('README.md')
-    assert_equal '-rw-r--r--', perm.trans_type_and_permission(file_stat)
+    assert_equal '-rw-r--r--', permission.trans_type_and_permission(file_stat)
   end
 
   def test_file_info
@@ -70,21 +70,21 @@ class LsTest < Minitest::Test
     assert_equal 'itagaki_syun', info.group
     assert_equal 4096, info.bytesize
     assert_equal '5月  8 14:56', info.update_time
-    option_l = LsOption.new(['-l'])
-    assert_equal '01.fizzbuzz', info.file_type(filename, option_l)
+    assert_equal '01.fizzbuzz', info.file_type
   end
 
   def test_width
-    widths = Width.new
-    stats1 = Struct.new(:link, :owner, :group, :bytesize)[5, 'alice', 'people', 1024]
-    widths.update_max_widths(stats1)
+    stats_template = Struct.new(:link, :owner, :group, :bytesize)
+    stats1 = stats_template.new(5, 'alice', 'people', 1024)
+    stats2 = stats_template.new(20, 'bob', 'dog', 512)
 
-    stats2 = Struct.new(:link, :owner, :group, :bytesize)[20, 'bob', 'dog', 512]
-    widths.update_max_widths(stats2)
+    all_stats = [stats1, stats2]
 
-    assert_equal 2, widths.max_widths[:link]
-    assert_equal 5, widths.max_widths[:owner]
-    assert_equal 6, widths.max_widths[:group]
-    assert_equal 4, widths.max_widths[:size]
+    widths = Width.new(all_stats).max_widths
+
+    assert_equal 2, widths[:link]
+    assert_equal 5, widths[:owner]
+    assert_equal 6, widths[:group]
+    assert_equal 4, widths[:size]
   end
 end
